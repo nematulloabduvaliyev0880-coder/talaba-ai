@@ -1,106 +1,124 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clock & Stopwatch</title>
+    <title>Talaba AI</title>
     <link rel="stylesheet" href="main.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-    <div class="tabsPanel">
+<div class="app">
+    <aside class="sidebar">
+        <h2 class="logo"><i data-lucide="graduation-cap"></i> TALABA AI</h2>
 
-        <ul class="tabsLinks">
-            <li class="tabsItem active">
-                <a href="#" class="tabsLink">Часы</a>
-            </li>
+        <p class="menu-title">ASOSIY</p>
+        <button class="nav active" data-page="home"><i data-lucide="layout-dashboard"></i> Bosh sahifa</button>
+        <button class="nav" data-page="ai"><i data-lucide="brain-circuit"></i> AI yordamchi</button>
+        <button class="nav" data-page="notes"><i data-lucide="notebook-pen"></i> Konspekt</button>
+        <button class="nav" data-page="tests"><i data-lucide="clipboard-check"></i> Testlar</button>
+        <button class="nav" data-page="schedule"><i data-lucide="calendar-days"></i> Dars jadvali</button>
 
-            <li class="tabsItem">
-                <a href="#" class="tabsLink">
-                    Секундомер
-                    <span class="tabsLink__span"></span>
-                </a>
-            </li>
-        </ul>
-
-        <div class="tabsContent">
-
-            <!-- SOAT -->
-            <div class="clock tabsContentItem active">
-
-                <div class="arrowClock">
-
-                    <div class="arrowClockNumber">
-                        <div class="arrowClockNumber__num arrowClockNumber__num_12">12</div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_1"></div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_2"></div>
-                        <div class="arrowClockNumber__num arrowClockNumber__num_3">3</div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_4"></div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_5"></div>
-                        <div class="arrowClockNumber__num arrowClockNumber__num_6">6</div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_7"></div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_8"></div>
-                        <div class="arrowClockNumber__num arrowClockNumber__num_9">9</div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_10"></div>
-                        <div class="arrowClockNumber__arr arrowClockNumber__arr_11"></div>
-                    </div>
-
-                    <div class="s"></div>
-                    <div class="m"></div>
-                    <div class="h"></div>
-
-                </div>
-
-                <div class="numberClock">
-                    <div class="hours">00</div>
-                    <div class="minutes">00</div>
-                </div>
-
-            </div>
-
-            <!-- SEKUNDOMER -->
-            <div class="stopwatch tabsContentItem">
-
-                <div class="stopwatch__clock">
-
-                    <div class="stopwatch__clock-description">
-                        <div class="stopwatch__minutes">0</div>
-                        Min
-                    </div>
-
-                    <div class="stopwatch__clock-description">
-                        <div class="stopwatch__seconds">0</div>
-                        Sek.
-                    </div>
-
-                    <div class="stopwatch__clock-description">
-                        <div class="stopwatch__mseconds">0</div>
-                        Msek.
-                    </div>
-
-                </div>
-
-                <div class="buttons">
-                    <button class="stopwatch__btn">Start</button>
-                </div>
-
-            </div>
-
+        <div class="sidebar-bottom">
+            <i data-lucide="user-circle"></i>
+            <div><b>O‘quvchi</b><small>Premium Student</small></div>
         </div>
+    </aside>
 
-    </div>
+    <main class="main">
+        <header>
+            <div>
+                <h1 id="page-title">Bosh sahifa</h1>
+                <p>Bilimingizni yangi bosqichga olib chiqing.</p>
+            </div>
+            <div class="header-icon"><i data-lucide="bell"></i></div>
+        </header>
 
-    <script src="script.js"></script>
+        <section id="home" class="page">
+            <div class="welcome">
+                <div>
+                    <span>AI TA'LIM PLATFORMASI</span>
+                    <h2>Salom! Xush kelibsiz.</h2>
+                    <p>Bugun yangi bilimlarni kashf etishga tayyormisiz?</p>
+                    <button class="white-btn" onclick="showPage('ai')">AI bilan boshlash <i data-lucide="arrow-right"></i></button>
+                </div>
+                <i data-lucide="graduation-cap" class="big-icon"></i>
+            </div>
 
+            <h3 class="section-title">Platforma imkoniyatlari</h3>
+            <div class="cards">
+                <div class="card" onclick="showPage('ai')">
+                    <i data-lucide="brain-circuit"></i>
+                    <h3>AI yordamchi</h3>
+                    <p>Savollaringizga javob oling.</p>
+                </div>
+                <div class="card" onclick="showPage('notes')">
+                    <i data-lucide="notebook-pen"></i>
+                    <h3>Konspekt</h3>
+                    <p>Mavzularni qisqacha yozing.</p>
+                </div>
+                <div class="card" onclick="showPage('tests')">
+                    <i data-lucide="clipboard-check"></i>
+                    <h3>Testlar</h3>
+                    <p>Bilimingizni sinab ko‘ring.</p>
+                </div>
+                <div class="card" onclick="showPage('schedule')">
+                    <i data-lucide="calendar-days"></i>
+                    <h3>Dars jadvali</h3>
+                    <p>Darslaringizni rejalashtiring.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai" class="page hidden">
+            <div class="panel">
+                <h2><i data-lucide="brain-circuit"></i> AI yordamchi</h2>
+                <p>O‘zingizni qiziqtirgan savolni yozing.</p>
+                <textarea id="ai-question" placeholder="Masalan: JavaScript nima?"></textarea>
+                <button class="primary-btn" onclick="askAI()">Savol yuborish <i data-lucide="send"></i></button>
+                <div id="ai-answer" class="answer">Javob shu yerda chiqadi.</div>
+            </div>
+        </section>
+
+        <section id="notes" class="page hidden">
+            <div class="panel">
+                <h2><i data-lucide="notebook-pen"></i> Konspekt yaratish</h2>
+                <input id="note-title" placeholder="Konspekt mavzusi"><textarea id="note-text" placeholder="Konspekt matnini yozing..."></textarea>
+                <button class="primary-btn" onclick="saveNote()">Saqlash <i data-lucide="save"></i></button>
+                <div id="notes-list"></div>
+            </div>
+        </section>
+
+        <section id="tests" class="page hidden">
+            <div class="panel">
+                <h2><i data-lucide="clipboard-check"></i> Bilimingizni tekshiring</h2>
+                <p>JavaScript bo‘yicha savol:</p>
+                <h3>JavaScriptda o‘zgaruvchi e'lon qilish uchun qaysi kalit so‘z ishlatiladi?</h3>
+                <div class="options">
+                    <button onclick="checkAnswer(this,false)">HTML</button>
+                    <button onclick="checkAnswer(this,true)">let</button>
+                    <button onclick="checkAnswer(this,false)">CSS</button>
+                    <button onclick="checkAnswer(this,false)">body</button>
+                </div>
+                <p id="test-result"></p>
+            </div>
+        </section>
+
+        <section id="schedule" class="page hidden">
+            <div class="panel">
+                <h2><i data-lucide="calendar-days"></i> Dars jadvali</h2>
+                <input id="lesson-name" placeholder="Dars nomi">
+                <input id="lesson-time" type="time">
+                <button class="primary-btn" onclick="addLesson()">Dars qo‘shish <i data-lucide="plus"></i></button>
+                <div id="lesson-list"></div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script src="script.js"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-

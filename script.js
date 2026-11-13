@@ -1,169 +1,180 @@
-// SOAT
-document.addEventListener("DOMContentLoaded", () => {
-    const hourHand = document.querySelector(".h");
-    const minuteHand = document.querySelector(".m");
-    const secondHand = document.querySelector(".s");
-
-    const digitalHours = document.querySelector(".hours");
-    const digitalMinutes = document.querySelector(".minutes");
-
-    function updateClock() {
-        const now = new Date();
-
-        const hours = now.getHours();
-        const minutes = now.getMinutes();
-        const seconds = now.getSeconds();
-        const ms = now.getMilliseconds();
-
-        secondHand.style.transform =
-            `rotate(${seconds * 6 + ms * 0.006}deg)`;
-
-        minuteHand.style.transform =
-            `rotate(${minutes * 6 + seconds * 0.1}deg)`;
-
-        hourHand.style.transform =
-            `rotate(${(hours % 12) * 30 + minutes * 0.5}deg)`;
-
-        digitalHours.textContent =
-            String(hours).padStart(2, "0");
-
-        digitalMinutes.textContent =
-            String(minutes).padStart(2, "0");
-
-        requestAnimationFrame(updateClock);
-    }
-
-    updateClock();
-
-    // TABLAR
-    const tabItems = document.querySelectorAll(".tabsItem");
-    const tabLinks = document.querySelectorAll(".tabsLink");
-    const tabContents = document.querySelectorAll(".tabsContentItem");
-
-    tabLinks.forEach((link, index) => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            tabItems.forEach(item =>
-                item.classList.remove("active")
-            );
-
-            tabContents.forEach(item =>
-                item.classList.remove("active")
-            );
-
-            tabItems[index].classList.add("active");
-            tabContents[index].classList.add("active");
-        });
+// Sahifalarni almashtirish
+function showPage(page) {
+    document.querySelectorAll('.page').forEach(item => {
+        item.classList.add('hidden');
     });
 
-    // SEKUNDOMER
-    const min = document.querySelector(".stopwatch__minutes");
-    const sec = document.querySelector(".stopwatch__seconds");
-    const ms = document.querySelector(".stopwatch__mseconds");
+    document.getElementById(page).classList.remove('hidden');
 
-    const buttons = document.querySelector(".buttons");
-    const start = document.querySelector(".stopwatch__btn");
-    const indicator = document.querySelector(".tabsLink__span");
-
-    const pause = document.createElement("button");
-    pause.className = "stopwatch__btn2";
-    pause.textContent = "Pause";
-    pause.type = "button";
-
-    const reset = document.createElement("button");
-    reset.className = "stopwatch__btn3";
-    reset.textContent = "Reset";
-    reset.type = "button";
-
-    buttons.append(pause, reset);
-
-    let startTime = 0;
-    let elapsedTime = 0;
-    let animationId = null;
-    let isRunning = false;
-
-    function showTime(time) {
-        const total = Math.floor(time);
-
-        min.textContent =
-            String(Math.floor(total / 60000)).padStart(2, "0");
-
-        sec.textContent =
-            String(Math.floor(total / 1000) % 60).padStart(2, "0");
-
-        ms.textContent =
-            String(Math.floor(total % 1000 / 10)).padStart(2, "0");
-    }
-
-    function updateStopwatch() {
-        if (!isRunning) return;
-
-        elapsedTime = performance.now() - startTime;
-        showTime(elapsedTime);
-
-        animationId = requestAnimationFrame(updateStopwatch);
-    }
-
-    function startTimer() {
-        if (isRunning) return;
-
-        isRunning = true;
-        startTime = performance.now() - elapsedTime;
-
-        start.textContent = "Running...";
-        start.disabled = true;
-        pause.textContent = "Pause";
-
-        indicator.classList.remove("active_clear");
-        indicator.classList.add("active");
-
-        animationId = requestAnimationFrame(updateStopwatch);
-    }
-
-    function pauseTimer() {
-        if (!isRunning) return;
-
-        isRunning = false;
-        cancelAnimationFrame(animationId);
-
-        elapsedTime = performance.now() - startTime;
-        showTime(elapsedTime);
-
-        start.textContent = "Start";
-        start.disabled = false;
-        pause.textContent = "Resume";
-
-        indicator.classList.remove("active");
-        indicator.classList.add("active_clear");
-    }
-
-    function resetTimer() {
-        isRunning = false;
-        cancelAnimationFrame(animationId);
-
-        elapsedTime = 0;
-        startTime = 0;
-
-        showTime(0);
-
-        start.textContent = "Start";
-        start.disabled = false;
-        pause.textContent = "Pause";
-
-        indicator.classList.remove("active", "active_clear");
-    }
-
-    start.addEventListener("click", startTimer);
-    pause.addEventListener("click", () => {
-        if (isRunning) {
-            pauseTimer();
-        } else if (elapsedTime > 0) {
-            startTimer();
-        }
+    document.querySelectorAll('.nav').forEach(item => {
+        item.classList.remove('active');
     });
 
-    reset.addEventListener("click", resetTimer);
+    const active = document.querySelector(`.nav[data-page="${page}"]`);
 
-    showTime(0);
+    if (active) active.classList.add('active');
+
+    const titles = {
+        home: 'Bosh sahifa',
+        ai: 'AI yordamchi',
+        notes: 'Konspekt',
+        tests: 'Testlar',
+        schedule: 'Dars jadvali'
+    };
+
+    document.getElementById('page-title').textContent = titles[page];
+}
+
+document.querySelectorAll('.nav').forEach(button => {
+    button.addEventListener('click', () => {
+        showPage(button.dataset.page);
+    });
 });
+
+
+// AI yordamchi (hozircha demo rejim)
+function askAI() {
+    const question = document.getElementById('ai-question').value.trim();
+    const answer = document.getElementById('ai-answer');
+
+    if (!question) {
+        answer.textContent = 'Iltimos, avval savol yozing.';
+        return;
+    }
+
+    answer.textContent = 'Savolingiz: ' + question +
+        '\n\nBu hozircha demo rejim. Haqiqiy AI javoblari uchun backend va AI API ulanishi kerak.';
+}
+
+
+// Konspekt saqlash
+let notes = JSON.parse(localStorage.getItem('talabaNotes')) || [];
+
+function renderNotes() {
+    const list = document.getElementById('notes-list');
+    list.innerHTML = '';
+
+    notes.forEach((note, index) => {
+        const item = document.createElement('div');
+        item.className = 'saved-item';
+
+        const content = document.createElement('div');
+        const title = document.createElement('b');
+        const description = document.createElement('p');
+
+        title.textContent = note.title;
+        description.textContent = note.text;
+
+        content.append(title, description);
+
+        const remove = document.createElement('button');
+        remove.textContent = 'O‘chirish';
+        remove.onclick = () => deleteNote(index);
+
+        item.append(content, remove);
+        list.appendChild(item);
+    });
+}
+
+function saveNote() {
+    const title = document.getElementById('note-title').value.trim();
+    const text = document.getElementById('note-text').value.trim();
+
+    if (!title || !text) {
+        alert('Mavzu va matnni to‘ldiring!');
+        return;
+    }
+
+    notes.push({ title, text });
+
+    localStorage.setItem('talabaNotes', JSON.stringify(notes));
+
+    document.getElementById('note-title').value = '';
+    document.getElementById('note-text').value = '';
+
+    renderNotes();
+}
+
+function deleteNote(index) {
+    notes.splice(index, 1);
+    localStorage.setItem('talabaNotes', JSON.stringify(notes));
+    renderNotes();
+}
+
+
+// Test tizimi
+function checkAnswer(button, correct) {
+    const result = document.getElementById('test-result');
+
+    document.querySelectorAll('.options button').forEach(item => {
+        item.style.borderColor = '#e4e7ef';
+    });
+
+    if (correct) {
+        result.textContent = 'To‘g‘ri javob! Barakalla.';
+        result.style.color = '#16a34a';
+        button.style.borderColor = '#16a34a';
+    } else {
+        result.textContent = 'Noto‘g‘ri javob. Yana urinib ko‘ring.';
+        result.style.color = '#dc2626';
+        button.style.borderColor = '#dc2626';
+    }
+}
+
+
+// Dars jadvali
+let lessons = JSON.parse(localStorage.getItem('talabaLessons')) || [];
+
+function renderLessons() {
+    const list = document.getElementById('lesson-list');
+    list.innerHTML = '';
+
+    lessons.forEach((lesson, index) => {
+        const item = document.createElement('div');
+        item.className = 'saved-item';
+
+        const content = document.createElement('div');
+        const title = document.createElement('b');
+        const time = document.createElement('p');
+
+        title.textContent = lesson.name;
+        time.textContent = lesson.time;
+
+        content.append(title, time);const remove = document.createElement('button');
+        remove.textContent = 'O‘chirish';
+        remove.onclick = () => deleteLesson(index);
+
+        item.append(content, remove);
+        list.appendChild(item);
+    });
+}
+
+function addLesson() {
+    const name = document.getElementById('lesson-name').value.trim();
+    const time = document.getElementById('lesson-time').value;
+
+    if (!name || !time) {
+        alert('Dars nomi va vaqtini kiriting!');
+        return;
+    }
+
+    lessons.push({ name, time });
+
+    localStorage.setItem('talabaLessons', JSON.stringify(lessons));
+
+    document.getElementById('lesson-name').value = '';
+    document.getElementById('lesson-time').value = '';
+
+    renderLessons();
+}
+
+function deleteLesson(index) {
+    lessons.splice(index, 1);
+    localStorage.setItem('talabaLessons', JSON.stringify(lessons));
+    renderLessons();
+}
+
+
+// Sahifa ochilganda saqlangan ma'lumotlarni chiqarish
+renderNotes();
+renderLessons();
